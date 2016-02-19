@@ -1,0 +1,99 @@
+using System.Drawing;
+using System;
+using System.Diagnostics;
+using Netron.Maths;
+using Netron.GraphLib.Interfaces;
+namespace Netron.AutomataShapes
+{
+	public class Script: IScript , System.IDisposable
+{
+	
+	private static int counter = 0;
+	IHost Host;
+	
+	public void Initialize( IHost Host ) 
+	{
+		this.Host = Host;
+	}
+	
+	public void Method1()
+	{
+	
+	} 
+
+	public void Method2()
+	{
+	
+	} 
+
+	public void Method3() 
+	{
+
+	} 
+
+	public void Compute()
+	{
+		Int32 xvalue;
+		Int32 yvalue;
+		xvalue = Convert.ToInt32( Host.XIn.Receives[0]);
+		yvalue = Convert.ToInt32( Host.YIn.Receives[0]);
+		//Host.ShowMessage( xvalue + "," + yvalue );
+		Host.Out.Sends.Add(CIM(xvalue,yvalue));
+	}
+	public Color GetRandomColor()
+	{
+  
+		Random rnd = new Random();
+		return Color.FromArgb( rnd.Next( 256 ), rnd.Next( 256 ), rnd.Next( 256 ));
+	}
+	public Color CIM( Int32 x, Int32 y )
+	{
+		double rrz = (- 4 + x * 0.08 );
+		double iiz = (- 4 + y * 0.08 );
+		Complex u = new Complex( 0.1, 0.1);
+		Complex z = new Complex( rrz, iiz);
+		Color col = Color.Silver;
+		Int16 i;
+
+		for ( i = 1; i <= 30; i += 1 )
+		{
+			z = ComplexNumbers.Sum( ComplexNumbers.Sum( ComplexNumbers.Sin( z ), ComplexNumbers.Square( z )), u );
+			if ( ComplexNumbers.Norm( z ) > 100 ) 
+			{
+				break;
+			}
+		}
+		if ( ( Math.Abs( ComplexNumbers.Re( z )) < 100 ) || Math.Abs( ComplexNumbers.Im( z )) < 100 ) 
+		{
+			col = Color.FromArgb( Math.Max(0,Math.Min(255,10 * i)), 200, 200, 200 );
+		}
+		return col;
+	}
+#region "IDisposable implementation"
+	public virtual void Dispose() 
+	{
+		Dispose( true );
+		System.GC.SuppressFinalize( this);
+	}
+
+	public virtual void Dispose( bool disposing )
+	{
+		if ( ( disposing ) ) 
+		{
+
+			// Free other state (managed objects).
+		}
+		// Free your own state (unmanaged objects).
+		// Set large fields to null.
+	}
+
+
+	~Script()
+	{
+		// Simply call Dispose(false).
+		Dispose( false );
+	}
+#endregion
+}
+
+}

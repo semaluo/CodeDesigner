@@ -1,0 +1,9 @@
+﻿FIX20060206：使DiagramControlBase支持滚动条
+	修复以后任何继承DiagramControlBase的控件只要设置AutoScroll = true;
+	以及设置AutoScrollMinSize后就可以使控件自动支持滚动
+	做了一下代码更改
+	1.在OnScroll事件里添加Invalidate()调用，使滚动事件发生时控件重画
+	2.在OnPaint事件里调用Graphics.TranslateTransform做坐标变换
+
+FIX2006020701:修复Connector类里attachedConnectors成员变量在初始化时未赋值的错误
+

@@ -1,0 +1,70 @@
+using System.Drawing;
+using System;
+using System.Diagnostics;
+using Netron.Maths;
+using Netron.GraphLib.Interfaces;
+namespace Netron.AutomataShapes
+{
+	public class Script: IScript , System.IDisposable
+{
+	
+	private static int counter = 0;
+	IHost Host;
+	
+	public void Initialize( IHost Host ) 
+	{
+		this.Host = Host;
+	}
+	
+	public void Method1()
+	{
+	
+	} 
+
+	public void Method2()
+	{
+	
+	} 
+
+	public void Method3() 
+	{
+
+	} 
+
+	public void Compute()
+	{
+		//Add here your code
+		//The X and Y values can be fetched from
+		//Int32 xvalue = Convert.ToInt32( Host.XIn.Receives[0]);
+		//Int32 yvalue = Convert.ToInt32( Host.YIn.Receives[0]);
+		//To send data out use:
+		//Host.Out.Sends.Add();
+	}
+#region "IDisposable implementation"
+	public virtual void Dispose() 
+	{
+		Dispose( true );
+		System.GC.SuppressFinalize( this);
+	}
+
+	public virtual void Dispose( bool disposing )
+	{
+		if ( ( disposing ) ) 
+		{
+
+			// Free other state (managed objects).
+		}
+		// Free your own state (unmanaged objects).
+		// Set large fields to null.
+	}
+
+
+	~Script()
+	{
+		// Simply call Dispose(false).
+		Dispose( false );
+	}
+#endregion
+}
+
+}
