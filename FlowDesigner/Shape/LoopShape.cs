@@ -1,27 +1,30 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Runtime.Serialization;
 using Netron.GraphLib;
 
 namespace FlowDesigner
 {
+    [Serializable]
     public class LoopShape : AbstractFlowChartShape
     {
         private Connector m_leftConnector;
         private Connector m_rightConnector;
 
-        protected override void InitEntity()
-        {
-            base.InitEntity();
 
-            Rectangle = new RectangleF(0, 0, 0, 0);
-            //add the connectors
+        public LoopShape():base()
+        {
+            Init();
+        }
+
+
+        private void Init()
+        {
             m_leftConnector = new Connector(this, "Left", true);
-            m_leftConnector.ConnectorLocation = ConnectorLocation.West;
             Connectors.Add(m_leftConnector);
 
             m_rightConnector = new Connector(this, "Right", true);
-            m_rightConnector.ConnectorLocation = ConnectorLocation.East;
             Connectors.Add(m_rightConnector);
-
         }
 
 
@@ -61,5 +64,27 @@ namespace FlowDesigner
             if (!string.IsNullOrEmpty(Text))
                 g.DrawString(Text, this.Font, this.TextBrush, t_textRect);
         }
+
+        #region Serialization
+        protected LoopShape(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            m_leftConnector = (Connector)info.GetValue("m_leftConnector", typeof(Connector));
+            m_leftConnector.BelongsTo = this;
+            Connectors.Add(m_leftConnector);
+
+            m_rightConnector = (Connector)info.GetValue("m_rightConnector", typeof(Connector));
+            m_rightConnector.BelongsTo = this;
+            Connectors.Add(m_rightConnector);
+
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("m_leftConnector", m_leftConnector);
+            info.AddValue("m_rightConnector", m_rightConnector);
+        }
+        #endregion
+
     }
 }

@@ -17,6 +17,9 @@ namespace FlowDesigner.Tool
         private static bool m_startDraw = false;
         private static PointF m_startPoint = new PointF(0,0);
 
+        private static readonly float m_defaultWidth = 150;
+        public static float m_defaultHeight = 50;
+
 
         public static void DrawShape(Shape shape, GraphControl graphicControl)
         {
@@ -56,7 +59,8 @@ namespace FlowDesigner.Tool
         {
             if (m_startDraw)
             {
-                m_startPoint = new PointF(e.Location.X, e.Location.Y);
+                //m_startPoint = new PointF(e.Location.X, e.Location.Y);
+                m_startPoint = new PointF(e.X - m_graphControl.AutoScrollPosition.X, e.Y - m_graphControl.AutoScrollPosition.Y);
                 m_shape.IsVisible = true;
             }
             /*
@@ -78,10 +82,11 @@ namespace FlowDesigner.Tool
             if (m_startDraw)
             {
                 m_shape.Invalidate();
-                float t_left = (m_startPoint.X < e.Location.X ? m_startPoint.X : e.Location.X);
-                float t_right = (m_startPoint.X >= e.Location.X ? m_startPoint.X : e.Location.X);
-                float t_top = (m_startPoint.Y < e.Location.Y ? m_startPoint.Y : e.Location.Y);
-                float t_bottom = (m_startPoint.Y >= e.Location.Y ? m_startPoint.Y : e.Location.Y);
+                PointF t_point = new PointF(e.X - m_graphControl.AutoScrollPosition.X, e.Y - m_graphControl.AutoScrollPosition.Y);
+                float t_left = (m_startPoint.X < t_point.X ? m_startPoint.X : t_point.X);
+                float t_right = (m_startPoint.X >= t_point.X ? m_startPoint.X : t_point.X);
+                float t_top = (m_startPoint.Y < t_point.Y ? m_startPoint.Y : t_point.Y);
+                float t_bottom = (m_startPoint.Y >= t_point.Y ? m_startPoint.Y : t_point.Y);
                 m_shape.Rectangle = RectangleF.FromLTRB(t_left, t_top, t_right, t_bottom);
                 m_shape.Invalidate();
             }
@@ -109,11 +114,21 @@ namespace FlowDesigner.Tool
             {
                 m_graphControl.Cursor = System.Windows.Forms.Cursors.Default;
 
-                float t_left = (m_startPoint.X < e.Location.X ? m_startPoint.X : e.Location.X);
-                float t_right = (m_startPoint.X >= e.Location.X ? m_startPoint.X : e.Location.X);
-                float t_top = (m_startPoint.Y < e.Location.Y ? m_startPoint.Y : e.Location.Y);
-                float t_bottom = (m_startPoint.Y >= e.Location.Y ? m_startPoint.Y : e.Location.Y);
+                PointF t_point = new PointF(e.X - m_graphControl.AutoScrollPosition.X, e.Y - m_graphControl.AutoScrollPosition.Y);
+                float t_left = (m_startPoint.X < t_point.X ? m_startPoint.X : t_point.X);
+                float t_right = (m_startPoint.X >= t_point.X ? m_startPoint.X : t_point.X);
+                float t_top = (m_startPoint.Y < t_point.Y ? m_startPoint.Y : t_point.Y);
+                float t_bottom = (m_startPoint.Y >= t_point.Y ? m_startPoint.Y : t_point.Y);
 
+                if (t_right - t_left < 10)
+                {
+                    t_right = t_left + m_defaultWidth;
+                }
+
+                if (t_bottom - t_top < 10)
+                {
+                    t_bottom = t_top + m_defaultHeight;
+                }
                 m_shape.Rectangle = RectangleF.FromLTRB(t_left, t_top, t_right, t_bottom);
                 m_shape.Invalidate();
 
@@ -147,7 +162,6 @@ namespace FlowDesigner.Tool
 
 
         }
-
 
     }
 }

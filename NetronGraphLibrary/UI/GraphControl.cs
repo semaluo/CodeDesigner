@@ -1531,7 +1531,7 @@ namespace Netron.GraphLib.UI
 
 						ResetToBaseMenu();
 					
-						if(typeof(Shape).IsInstanceOfType(Hover))
+						if(Hover is Shape)
 						{
 							//MenuItem[] tmp = new MenuItem[mContextMenu.MenuItems.Count];
 							//mContextMenu.MenuItems.CopyTo(tmp,0);	

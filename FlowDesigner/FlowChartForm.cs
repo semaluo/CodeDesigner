@@ -51,5 +51,27 @@ namespace FlowDesigner
             IfShape shape = new IfShape();
             ShapeDrawTool.DrawShape(shape, graphControl);
         }
+
+        private void menu_open_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    graphControl.Open(ofd.FileName);
+                }
+            }
+        }
+
+        private void menu_save_to_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    graphControl.SaveAs(sfd.FileName);
+                }
+            }
+        }
     }
 }

@@ -8,22 +8,24 @@ using System.Threading.Tasks;
 using Netron.GraphLib;
 using Netron.GraphLib.Interfaces;
 using Netron.GraphLib.UI;
+using System.Runtime.Serialization;
 
 namespace FlowDesigner
 {
-
+    [Serializable]
     public class SequenceShape : AbstractFlowChartShape
     {
         private Connector m_leftConnector;
 
-        protected override void InitEntity()
+        public SequenceShape():base()
         {
-            base.InitEntity();
+            Init();
+        }
 
-            Rectangle = new RectangleF(0, 0, 0, 0);
-            //add the connectors
+
+        private void Init()
+        {
             m_leftConnector = new Connector(this, "Left", true);
-            m_leftConnector.ConnectorLocation = ConnectorLocation.West;
             Connectors.Add(m_leftConnector);
         }
 
@@ -48,6 +50,22 @@ namespace FlowDesigner
                 g.DrawString(Text,this.Font, this.TextBrush, System.Drawing.RectangleF.Inflate(Rectangle,0,-2));
         }
 
+        #region Serialization
+        protected SequenceShape(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            m_leftConnector = (Connector)info.GetValue("m_leftConnector", typeof(Connector));
+            m_leftConnector.BelongsTo = this;
+            Connectors.Add(m_leftConnector);
+
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue("m_leftConnector", m_leftConnector);
+        }
+        #endregion
 
     }
 }

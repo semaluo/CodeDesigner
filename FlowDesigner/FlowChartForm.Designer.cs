@@ -43,11 +43,15 @@
             this.label1 = new System.Windows.Forms.Label();
             this.graphControl = new Netron.GraphLib.UI.GraphControl();
             this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menu_open = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_save_to = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStripContainer2.LeftToolStripPanel.SuspendLayout();
             this.toolStripContainer2.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripContainer
@@ -195,10 +199,11 @@
             this.graphControl.BackgroundColor = System.Drawing.Color.White;
             this.graphControl.BackgroundImagePath = null;
             this.graphControl.BackgroundType = Netron.GraphLib.CanvasBackgroundType.FlatColor;
+            this.graphControl.ContextMenuStrip = this.contextMenuStrip;
             this.graphControl.DefaultConnectionEnd = Netron.GraphLib.ConnectionEnd.NoEnds;
             this.graphControl.DefaultConnectionPath = "Default";
             this.graphControl.DoTrack = false;
-            this.graphControl.EnableContextMenu = true;
+            this.graphControl.EnableContextMenu = false;
             this.graphControl.EnableLayout = false;
             this.graphControl.EnableToolTip = true;
             this.graphControl.FileName = null;
@@ -209,7 +214,7 @@
             this.graphControl.GridSize = 20;
             this.graphControl.Location = new System.Drawing.Point(40, 0);
             this.graphControl.Name = "graphControl";
-            this.graphControl.RestrictToCanvas = true;
+            this.graphControl.RestrictToCanvas = false;
             this.graphControl.ShowAutomataController = false;
             this.graphControl.ShowGrid = false;
             this.graphControl.Size = new System.Drawing.Size(396, 362);
@@ -235,6 +240,28 @@
             this.toolStripContainer2.TabIndex = 2;
             this.toolStripContainer2.Text = "toolStripContainer2";
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_open,
+            this.menu_save_to});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(153, 70);
+            // 
+            // menu_open
+            // 
+            this.menu_open.Name = "menu_open";
+            this.menu_open.Size = new System.Drawing.Size(152, 22);
+            this.menu_open.Text = "打开";
+            this.menu_open.Click += new System.EventHandler(this.menu_open_Click);
+            // 
+            // menu_save_to
+            // 
+            this.menu_save_to.Name = "menu_save_to";
+            this.menu_save_to.Size = new System.Drawing.Size(152, 22);
+            this.menu_save_to.Text = "保存";
+            this.menu_save_to.Click += new System.EventHandler(this.menu_save_to_Click);
+            // 
             // FlowChartForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -254,6 +281,7 @@
             this.toolStripContainer2.LeftToolStripPanel.PerformLayout();
             this.toolStripContainer2.ResumeLayout(false);
             this.toolStripContainer2.PerformLayout();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -272,5 +300,8 @@
         private Netron.GraphLib.UI.GraphControl graphControl;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripContainer toolStripContainer2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem menu_open;
+        private System.Windows.Forms.ToolStripMenuItem menu_save_to;
     }
 }

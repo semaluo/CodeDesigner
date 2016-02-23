@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Netron.GraphLib;
 using Netron.GraphLib.Interfaces;
@@ -7,6 +8,7 @@ using Netron.GraphLib.UI;
 
 namespace FlowDesigner
 {
+    [Serializable]
     public class FlowChartConnection: Connection
     {
         private bool m_changing = false;
@@ -23,10 +25,20 @@ namespace FlowDesigner
             Init();
         }
 
+        protected FlowChartConnection(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            BindEvent();
+        }
+
         private void Init()
         {
             Text = String.Empty;
             ShowLabel = true;
+            BindEvent();
+        }
+
+        private void BindEvent()
+        {
             OnMouseDown += FlowChartConnection_OnMouseDown;
             OnMouseMove += FlowChartConnection_OnMouseMove;
             OnMouseUp += FlowChartConnection_OnMouseUp;
@@ -127,7 +139,7 @@ namespace FlowDesigner
             PointF t_to = PointF.Empty;
             PointF t_from = Point.Empty;
 
-            if (From == null) return null;
+            if (From == null) return new PointF[] { PointF.Empty };
 
             if (From?.Name == "Left" && To?.Name == "Left")
             {
@@ -195,8 +207,28 @@ namespace FlowDesigner
             }
         }
 
+        public override void PostDeserialization()
+        {
+            base.PostDeserialization();
 
+            //OnMouseDown += FlowChartConnection_OnMouseDown;
+            //OnMouseMove += FlowChartConnection_OnMouseMove;
+            //OnMouseUp += FlowChartConnection_OnMouseUp;
 
+        }
+
+        public override string Text
+        {
+            get
+            {
+                if (From != null && (From.Name == "Yes" || From.Name == "No") )
+                {
+                    return From.Name;
+                }
+
+                return base.Text;
+            }
+        }
 
     }
 }

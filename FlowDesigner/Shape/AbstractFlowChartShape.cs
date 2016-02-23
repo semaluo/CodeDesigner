@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Netron.GraphLib;
 using Netron.GraphLib.Interfaces;
@@ -7,6 +8,7 @@ using Netron.GraphLib.UI;
 
 namespace FlowDesigner
 {
+    [Serializable]
     public abstract class AbstractFlowChartShape : Shape, IConnectable
     {
         #region private variables
@@ -16,7 +18,13 @@ namespace FlowDesigner
         private int m_autoShiftX = 30;
         private int m_autoShiftY = 60;
         private bool m_isEditable = true;
-       
+
+        public AbstractFlowChartShape() : base()
+        {
+            Init();
+        }
+
+
         #endregion
 
         #region public variables
@@ -74,16 +82,17 @@ namespace FlowDesigner
         {
             base.InitEntity();
 
+            this.OnMouseDown += AbstractFlowChartShape_OnMouseDown;
+            this.OnMouseMove += AbstractFlowChartShape_OnMouseMove;
+            this.OnMouseUp += AbstractFlowChartShape_OnMouseUp;
+        }
 
+        private void Init()
+        {
             Text = String.Empty;
             Font = new Font("宋体", 10);
             Pen = new Pen(Color.FromArgb(167, 58, 95));
             ShapeColor = Color.FromArgb(255, 253, 205);
-
-
-            this.OnMouseDown += AbstractFlowChartShape_OnMouseDown;
-            this.OnMouseMove += AbstractFlowChartShape_OnMouseMove;
-            this.OnMouseUp += AbstractFlowChartShape_OnMouseUp;
         }
 
         private void AbstractFlowChartShape_OnMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -513,6 +522,24 @@ namespace FlowDesigner
             return connectorAbove.Location.Y < connectorBelow.Location.Y;
         }
 
+        #region serialization
+        protected AbstractFlowChartShape(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            this.m_isEditable = info.GetBoolean("m_isEditable");
+        }
 
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("m_isEditable", m_isEditable);
+        }
+
+        public override void PostDeserialization()
+        {
+            base.PostDeserialization();
+            Pen = new Pen(Color.FromArgb(167, 58, 95));
+
+        }
+        #endregion
     }
 }

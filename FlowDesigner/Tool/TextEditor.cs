@@ -1,4 +1,5 @@
 ﻿using Netron.GraphLib;
+using Netron.GraphLib.UI;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -56,7 +57,8 @@ namespace FlowDesigner
             }
 
             editor.Shape = shape;
-            editor.Location = Point.Round(editor.Shape.Rectangle.Location);
+            editor.Location = Point.Round(editor.Shape.Rectangle.Location + new SizeF(shape.Site.AutoScrollPosition.X, shape.Site.AutoScrollPosition.Y));
+//            editor.Location = Point.Round(editor.Shape.Rectangle.Location);
             editor.Width = (int)editor.Shape.Rectangle.Width;
             editor.Height = (int)editor.Shape.Rectangle.Height;
             editor.Font = new Font("Tahoma", 8.5F); 

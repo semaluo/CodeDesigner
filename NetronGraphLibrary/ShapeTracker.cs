@@ -202,8 +202,16 @@ namespace Netron.GraphLib
 			}
 
 			//reshaping form when hitting the edges
-			if (br.X<maxSize.Width && (br.X-tl.X)>minsize) mRectangle.Width =  br.X - tl.X;
-			if (br.Y<maxSize.Height && (br.Y - tl.Y)>minsize) mRectangle.Height = br.Y - tl.Y;			
+		    if (mSite.RestrictToCanvas)
+		    {
+			    if (br.X<maxSize.Width && (br.X-tl.X)>minsize) mRectangle.Width =  br.X - tl.X;
+			    if (br.Y<maxSize.Height && (br.Y - tl.Y)>minsize) mRectangle.Height = br.Y - tl.Y;			
+		    }
+		    else
+		    {
+                mRectangle.Width = br.X - tl.X;
+                mRectangle.Height = br.Y - tl.Y;
+		    }
 
 			//if the shape requires the rectangle to be square:
 			if(mSquare) mRectangle.Width = mRectangle.Height;

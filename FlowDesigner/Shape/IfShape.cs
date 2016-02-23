@@ -1,33 +1,37 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Runtime.Serialization;
 using Netron.GraphLib;
 
 namespace FlowDesigner
 {
+
+    [Serializable]
     public class IfShape : AbstractFlowChartShape
     {
         private Connector m_leftConnector;
         private Connector m_yesConnector;
         private Connector m_noConnector;
 
-        protected override void InitEntity()
+        public IfShape():base()
         {
-            base.InitEntity();
+            Init();
+        }
 
-            Rectangle = new RectangleF(0, 0, 0, 0);
-            //add the connectors
+
+        private void Init()
+        {
             m_leftConnector = new Connector(this, "Left", true);
-            m_leftConnector.ConnectorLocation = ConnectorLocation.West;
             Connectors.Add(m_leftConnector);
 
             m_yesConnector = new Connector(this, "Yes", true);
-            m_yesConnector.ConnectorLocation = ConnectorLocation.Omni;
+            m_yesConnector.AllowNewConnectionsTo = false;
             Connectors.Add(m_yesConnector);
 
             m_noConnector = new Connector(this, "No", true);
-            m_noConnector.ConnectorLocation = ConnectorLocation.Omni;
+            m_noConnector.AllowNewConnectionsTo = false;
             Connectors.Add(m_noConnector);
-
         }
 
 
@@ -80,5 +84,31 @@ namespace FlowDesigner
             if (!string.IsNullOrEmpty(Text))
                 g.DrawString(Text, this.Font, this.TextBrush, t_textRect);
         }
+
+        #region Serialization
+        protected IfShape(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            m_leftConnector = (Connector)info.GetValue("m_leftConnector", typeof(Connector));
+            m_leftConnector.BelongsTo = this;
+            Connectors.Add(m_leftConnector);
+
+            m_yesConnector = (Connector)info.GetValue("m_yesConnector", typeof(Connector));
+            m_yesConnector.BelongsTo = this;
+            Connectors.Add(m_yesConnector);
+
+            m_noConnector = (Connector)info.GetValue("m_noConnector", typeof(Connector));
+            m_noConnector.BelongsTo = this;
+            Connectors.Add(m_noConnector);
+
+        }
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("m_leftConnector", m_leftConnector);
+            info.AddValue("m_yesConnector", m_yesConnector);
+            info.AddValue("m_noConnector", m_noConnector);
+        }
+        #endregion
+
     }
 }
