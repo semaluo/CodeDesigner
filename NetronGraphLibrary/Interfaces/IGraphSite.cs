@@ -168,10 +168,11 @@ namespace Netron.GraphLib.Interfaces
 		/// <param name="connection"></param>
 		/// <param name="manual"></param>
 		void RaiseOnConnectionAdded(Connection connection, bool manual);
-		/// <summary>
-		/// Raises the OnShowGraphLayers event
-		/// </summary>
-		void RaiseOnShowGraphLayers();
+
+        /// <summary>
+        /// Raises the OnShowGraphLayers event
+        /// </summary>
+        void RaiseOnShowGraphLayers();
 		/// <summary>
 		/// Raises the OnShowPropertiesDialogRequest event
 		/// </summary>

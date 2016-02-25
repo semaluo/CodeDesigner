@@ -3475,9 +3475,9 @@
             Derived from the Shape class, can draw the whole plex as if it was a single shape
             </summary>
         </member>
-        <member name="F:Netron.GraphLib.GraphAbstract.mDefaultLayer">
+        <member name="F:Netron.GraphLib.GraphAbstract.mCurrentLayer">
             <summary>
-            the default and static background layer
+            Current active layer
             </summary>
         </member>
         <member name="F:Netron.GraphLib.GraphAbstract.mLayers">
@@ -3565,6 +3565,20 @@
             Binds the collections events of the ShapeCollection and ConnectionCollection
             </summary>
         </member>
+        <member name="M:Netron.GraphLib.GraphAbstract.ConnectionsOfLayer(System.String)">
+            <summary>
+            return the connections of layer
+            </summary>
+            <param name="layerName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Netron.GraphLib.GraphAbstract.ShapesOfLayer(System.String)">
+            <summary>
+            return the shapes of layer
+            </summary>
+            <param name="layerName"></param>
+            <returns></returns>
+        </member>
         <member name="M:Netron.GraphLib.GraphAbstract.Layers_ClearComplete(System.Object,System.EventArgs)">
             <summary>
             Performs an additional reset of all shapes to the default layer if all layers are 
@@ -3586,6 +3600,26 @@
             Paints the abstract on request of an external object (i.e. not the graph control itself) like the printer or the SaveImage method
             </summary>
             <param name="g"></param>
+        </member>
+        <member name="M:Netron.GraphLib.GraphAbstract.ActiveLayer(System.String)">
+            <summary>
+            ÉèÖÃlayerNameµÄLayerÎªCurrentLayer,²¢ÉèÖÃÇ°Ò»¸ö¼¤»îµÄLayerÎª²»¿É¼û
+            </summary>
+            <param name="layerName"></param>
+            <returns>¼¤»î³É¹¦Ôò·µ»Øtrue</returns>
+        </member>
+        <member name="M:Netron.GraphLib.GraphAbstract.ActiveLayer(System.Int32)">
+            <summary>
+            ÉèÖÃ±àºÅÎªlayerIndexµÄLayerÎªCurrentLayer,²¢ÉèÖÃÇ°Ò»¸ö¼¤»îµÄLayerÎª²»¿É¼û
+            </summary>
+            <param name="layerIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Netron.GraphLib.GraphAbstract.Insert(Netron.GraphLib.GraphLayer)">
+             <summary>
+            if layer is not inserted before, insert it into Layers
+             </summary>
+             <param name="layer"></param>
         </member>
         <member name="M:Netron.GraphLib.GraphAbstract.Insert(Netron.GraphLib.Shape)">
             <summary>
@@ -7438,6 +7472,13 @@
             Clean up any resources being used.
             </summary>
         </member>
+        <member name="M:Netron.GraphLib.UI.GraphControl.ShapesOfLayer(System.String)">
+            <summary>
+            return the shapes of layer
+            </summary>
+            <param name="layerName"></param>
+            <returns></returns>
+        </member>
         <member name="M:Netron.GraphLib.UI.GraphControl.ZoomPoint(System.Drawing.Point)">
             <summary>
             Zooms given point.
@@ -8901,6 +8942,30 @@
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
+        </member>
+        <member name="M:Netron.GraphLib.UI.PageSize.GetA4(System.Int32,System.Int32)">
+            <summary>
+            Get the pixel number for A4 size according to dpi
+            </summary>
+            <param name="dpix"></param>
+            <param name="dpiy"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Netron.GraphLib.UI.PageSize.GetA3(System.Int32,System.Int32)">
+            <summary>
+            Get the pixel number for A3 size according to dpi
+            </summary>
+            <param name="dpix"></param>
+            <param name="dpiy"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Netron.GraphLib.UI.PageSize.GetMSWordPage(System.Int32,System.Int32)">
+            <summary>
+            Get the pixel number for Microsoft Word page size according to dpi
+            </summary>
+            <param name="dpix"></param>
+            <param name="dpiy"></param>
+            <returns></returns>
         </member>
         <member name="T:Netron.GraphLib.UI.ShapesTab">
             <summary>

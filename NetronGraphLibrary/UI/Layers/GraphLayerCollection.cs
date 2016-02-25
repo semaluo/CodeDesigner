@@ -26,7 +26,7 @@ namespace Netron.GraphLib
 				if(index<Count && index>=0)
 					return this.InnerList[index] as GraphLayer;
 				else
-					return GraphAbstract.DefaultLayer;
+					return null;
 			}
 		}
 
@@ -75,6 +75,13 @@ namespace Netron.GraphLib
 		/// <returns></returns>
 		public int Add(GraphLayer layer)
 		{
+		    for(int i = 0; i< InnerList.Count; i++)
+		    {
+                if (layer == InnerList[i])
+		        {
+                    return i;
+		        }
+		    }
 
 			int index =  this.InnerList.Add(layer);
 			layer.SetNumber( index);

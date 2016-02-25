@@ -475,6 +475,7 @@
     <Compile Include="UI\Layers\ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\PageSize.cs" />
     <Compile Include="UI\PointFTypeConverter.cs">
       <SubType>Code</SubType>
     </Compile>

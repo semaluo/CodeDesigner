@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using FlowDesigner.Tool;
+using FlowDesigner.Dialog;
 using Netron.GraphLib;
 using Netron.GraphLib.UI;
 using WeifenLuo.WinFormsUI.Docking;
@@ -70,6 +71,37 @@ namespace FlowDesigner
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     graphControl.SaveAs(sfd.FileName);
+                }
+            }
+        }
+
+        private void menu_layerManage_Click(object sender, EventArgs e)
+        {
+            LayersDialog dlg = new LayersDialog(graphControl);
+            dlg.ShowDialog();
+        }
+
+        private void btn_switch_Click(object sender, EventArgs e)
+        {
+            BlockShape shape = new BlockShape(graphControl);
+            ShapeDrawTool.DrawShape(shape, graphControl);
+        }
+
+        private void menu_goUpperLayer_Click(object sender, EventArgs e)
+        {
+            if (graphControl.Abstract.CurrentLayer != graphControl.Abstract.DefaultLayer)
+            {
+                foreach (Shape shape in graphControl.Shapes)
+                {
+                    if (shape is BlockShape)
+                    {
+                        GraphLayer layer = (shape as BlockShape).LinkedLayer;
+                        if (layer != null && layer == graphControl.Abstract.CurrentLayer)
+                        {
+                            graphControl.Abstract.ActiveLayer(shape.Layer.Name);
+                            return;
+                        }
+                    }
                 }
             }
         }

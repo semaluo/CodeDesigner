@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -18,6 +19,7 @@ namespace FlowDesigner
         private int m_autoShiftX = 30;
         private int m_autoShiftY = 60;
         private bool m_isEditable = true;
+        private ISite site;
 
         public AbstractFlowChartShape() : base()
         {
@@ -115,6 +117,8 @@ namespace FlowDesigner
         private void AbstractFlowChartShape_OnMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (!(Site is GraphControl) ) return;
+            if (Layer != Abstract.CurrentLayer) return;
+
 
             if (IsAutoConnect) //Auto connect and disconnect
             {
@@ -147,7 +151,8 @@ namespace FlowDesigner
                             return;
                         }
 
-                        Connection t_connection = FindConnectableConnection(Site.Connections);
+                        ConnectionCollection t_connections = Abstract.ConnectionsOfLayer(Layer.Name);
+                        Connection t_connection = FindConnectableConnection(t_connections);
                         if (t_connection != null)
                         {
                             AttachToConnection(t_connection);
@@ -155,7 +160,8 @@ namespace FlowDesigner
                             return;
                         }
 
-                        Connector t_connector = FindConnectableConnector(Site.Shapes);
+                        ShapeCollection t_shapes = Abstract.ShapesOfLayer(Layer.Name);
+                        Connector t_connector = FindConnectableConnector(t_shapes);
                         if (t_connector != null)
                         {
                             AttachToConnector(t_connector);
@@ -526,6 +532,12 @@ namespace FlowDesigner
         protected AbstractFlowChartShape(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             this.m_isEditable = info.GetBoolean("m_isEditable");
+        }
+
+        public AbstractFlowChartShape(IGraphSite site):base(site)
+        {
+            this.Site = site;
+            Init();
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

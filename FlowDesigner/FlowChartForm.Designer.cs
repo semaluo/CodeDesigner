@@ -42,16 +42,18 @@
             this.labelY = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.graphControl = new Netron.GraphLib.UI.GraphControl();
-            this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menu_open = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_save_to = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_layerManage = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
+            this.menu_goUpperLayer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.toolStripContainer2.LeftToolStripPanel.SuspendLayout();
             this.toolStripContainer2.SuspendLayout();
-            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripContainer
@@ -138,6 +140,7 @@
             this.btn_switch.Size = new System.Drawing.Size(35, 36);
             this.btn_switch.Text = "toolStripButton5";
             this.btn_switch.ToolTipText = "分支结构";
+            this.btn_switch.Click += new System.EventHandler(this.btn_switch_Click);
             // 
             // panel1
             // 
@@ -223,6 +226,37 @@
             this.graphControl.Text = "graphControl1";
             this.graphControl.Zoom = 1F;
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_open,
+            this.menu_save_to,
+            this.menu_layerManage,
+            this.menu_goUpperLayer});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(153, 114);
+            // 
+            // menu_open
+            // 
+            this.menu_open.Name = "menu_open";
+            this.menu_open.Size = new System.Drawing.Size(152, 22);
+            this.menu_open.Text = "打开";
+            this.menu_open.Click += new System.EventHandler(this.menu_open_Click);
+            // 
+            // menu_save_to
+            // 
+            this.menu_save_to.Name = "menu_save_to";
+            this.menu_save_to.Size = new System.Drawing.Size(152, 22);
+            this.menu_save_to.Text = "保存";
+            this.menu_save_to.Click += new System.EventHandler(this.menu_save_to_Click);
+            // 
+            // menu_layerManage
+            // 
+            this.menu_layerManage.Name = "menu_layerManage";
+            this.menu_layerManage.Size = new System.Drawing.Size(152, 22);
+            this.menu_layerManage.Text = "管理Layer";
+            this.menu_layerManage.Click += new System.EventHandler(this.menu_layerManage_Click);
+            // 
             // toolStripContainer2
             // 
             // 
@@ -240,27 +274,12 @@
             this.toolStripContainer2.TabIndex = 2;
             this.toolStripContainer2.Text = "toolStripContainer2";
             // 
-            // contextMenuStrip
+            // menu_goUpperLayer
             // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_open,
-            this.menu_save_to});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(153, 70);
-            // 
-            // menu_open
-            // 
-            this.menu_open.Name = "menu_open";
-            this.menu_open.Size = new System.Drawing.Size(152, 22);
-            this.menu_open.Text = "打开";
-            this.menu_open.Click += new System.EventHandler(this.menu_open_Click);
-            // 
-            // menu_save_to
-            // 
-            this.menu_save_to.Name = "menu_save_to";
-            this.menu_save_to.Size = new System.Drawing.Size(152, 22);
-            this.menu_save_to.Text = "保存";
-            this.menu_save_to.Click += new System.EventHandler(this.menu_save_to_Click);
+            this.menu_goUpperLayer.Name = "menu_goUpperLayer";
+            this.menu_goUpperLayer.Size = new System.Drawing.Size(152, 22);
+            this.menu_goUpperLayer.Text = "回到上一图层";
+            this.menu_goUpperLayer.Click += new System.EventHandler(this.menu_goUpperLayer_Click);
             // 
             // FlowChartForm
             // 
@@ -277,11 +296,11 @@
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.toolStripContainer2.LeftToolStripPanel.ResumeLayout(false);
             this.toolStripContainer2.LeftToolStripPanel.PerformLayout();
             this.toolStripContainer2.ResumeLayout(false);
             this.toolStripContainer2.PerformLayout();
-            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -303,5 +322,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem menu_open;
         private System.Windows.Forms.ToolStripMenuItem menu_save_to;
+        private System.Windows.Forms.ToolStripMenuItem menu_layerManage;
+        private System.Windows.Forms.ToolStripMenuItem menu_goUpperLayer;
     }
 }

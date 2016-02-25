@@ -163,7 +163,7 @@ namespace Netron.GraphLib
 		protected override void SetLayer(GraphLayer layer)
 		{
 			base.SetLayer (layer);
-			if(layer==GraphAbstract.DefaultLayer)
+			if(layer==Site.Abstract.DefaultLayer)
 			{
 				LineColor = Color.FromArgb(255,mLineColor);
 			}
@@ -1142,7 +1142,7 @@ namespace Netron.GraphLib
 				case "LinePath": e.Value = this.mLinePath; break;
 				case "Layer" : 
 					if(Layer==null)
-						e.Value = GraphAbstract.DefaultLayer;
+						e.Value = Site.Abstract.DefaultLayer;
 					else
 						e.Value = this.Layer; 
 					break;

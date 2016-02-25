@@ -140,7 +140,7 @@ namespace Netron.GraphLib
 
 			mControls = new NetronGraphControlCollection();
 
-			this.SetLayer(GraphAbstract.DefaultLayer);
+			//this.SetLayer(Site.Abstract.DefaultLayer);
 
 			this.mCanMove = info.GetBoolean("mCanMove");
 
@@ -179,12 +179,12 @@ namespace Netron.GraphLib
 		public override void PostDeserialization()
 		{
 			base.PostDeserialization ();
-			if(Tag!=null && typeof(string).IsInstanceOfType(Tag))
-			{
-				SetLayer((string) Tag);
-				Tag = null; //be nice to the host/user
-			}
-		}
+            if (Tag is string)
+            {
+                SetLayer((string)Tag);
+                Tag = null; //be nice to the host/user
+            }
+        }
 
 
 		#endregion
@@ -298,10 +298,13 @@ namespace Netron.GraphLib
 		{
 			if(layer==null) return;
 			base.SetLayer (layer);
-			if(layer == GraphAbstract.DefaultLayer)
+			if(layer == Site.Abstract.DefaultLayer)
 			{
 				mShapeColor = Color.FromArgb(255,ShapeColor);
-				Pen=new Pen(Brushes.Black, PenWidth);
+			    if (Pen == null)
+			    {
+                    Pen = new Pen(Brushes.Black, PenWidth);
+			    }
 				TextColor =  Color.FromArgb(255,TextColor);
 			}
 			else
@@ -309,15 +312,22 @@ namespace Netron.GraphLib
 				int alpha = (int) (Layer.Opacity*255f/100);
 				if(Layer.UseColor)				
 				{
-
 					mShapeColor = Color.FromArgb(alpha ,Layer.LayerColor);								
 				}
 				else
 				{
 					mShapeColor = Color.FromArgb((int) (Layer.Opacity*255f/100),ShapeColor);
 				}
-				Pen=new Pen(Color.FromArgb(alpha,Color.Black), PenWidth);
-				TextColor =  Color.FromArgb(alpha,TextColor);
+
+			    if (Pen == null)
+			    {
+				    Pen=new Pen(Color.FromArgb(alpha,Color.Black), PenWidth);
+			    }
+			    else
+			    {
+                    Pen = new Pen(Color.FromArgb(alpha, Pen.Color), PenWidth);
+                }
+                TextColor =  Color.FromArgb(alpha,TextColor);
 			}
 		}
 
@@ -492,11 +502,13 @@ namespace Netron.GraphLib
 			}
 			set
 			{
-				if(!Layer.UseColor)//only set the color if the layer it's on doesn't enforce a color
-					mShapeColor=value;
-				else
-					MessageBox.Show("The shape is part of layer and enforces a color. \n\nIf you want to change the color, unset the color flag of the layer or assign the shape to the default layer","Cannot change the color",MessageBoxButtons.OK,MessageBoxIcon.Information);
-			}
+                if (Layer != null && Layer.UseColor)//only set the color if the layer it's on doesn't enforce a color
+                    return;
+
+                mShapeColor = value;
+                //				else
+                //					MessageBox.Show("The shape is part of layer and enforces a color. \n\nIf you want to change the color, unset the color flag of the layer or assign the shape to the default layer","Cannot change the color",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            }
 		}
 
 		/// <summary>
@@ -510,7 +522,7 @@ namespace Netron.GraphLib
 					return new SolidBrush(ControlPaint.Light(mShapeColor)); 
 				else
 				{
-					if(Layer != GraphAbstract.DefaultLayer)
+					if(Layer != Site.Abstract.DefaultLayer)
 						 return new SolidBrush(Color.FromArgb((int) Math.Round(Layer.Opacity*255f/100),mShapeColor));
 					else
 						return new SolidBrush(mShapeColor);
@@ -1024,7 +1036,7 @@ namespace Netron.GraphLib
 				case "ShapeColor": e.Value=this.mShapeColor;break;
 				case "Layer" : 
 					if(Layer==null)
-						e.Value = GraphAbstract.DefaultLayer;
+						e.Value = Site.Abstract.DefaultLayer;
 					else
 						e.Value = this.Layer; 
 					break;

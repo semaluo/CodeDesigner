@@ -37,12 +37,17 @@ namespace Netron.GraphLib
 		/// <summary>
 		/// the default and static background layer
 		/// </summary>
-		protected static GraphLayer mDefaultLayer;
+		//protected static GraphLayer mDefaultLayer;
 
-		/// <summary>
-		/// the shape layers
-		/// </summary>
-		protected GraphLayerCollection mLayers;
+        /// <summary>
+        /// Current active layer
+        /// </summary>
+        private GraphLayer mCurrentLayer;
+
+        /// <summary>
+        /// the shape layers
+        /// </summary>
+        protected GraphLayerCollection mLayers;
 
 		/// <summary>
 		/// the control this abstract belongs to
@@ -65,14 +70,14 @@ namespace Netron.GraphLib
 		/// </summary>
 		internal EntityCollection paintables = new EntityCollection();
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Gets the shape layers
-		/// </summary>
-		public GraphLayerCollection Layers
+        /// <summary>
+        /// Gets the shape layers
+        /// </summary>
+        public GraphLayerCollection Layers
 		{
 			get{return mLayers;}			
 		}
@@ -81,10 +86,31 @@ namespace Netron.GraphLib
 		/// 
 		/// </summary>
 		/// <remarks>Note that this is a static property</remarks>
-		public static GraphLayer DefaultLayer
+		public GraphLayer DefaultLayer
 		{
-			get{return mDefaultLayer;}
+		    get
+		    {
+		        if (mLayers == null)
+		        {
+                    return null;
+		        }
+
+		        GraphLayer layer = mLayers["Default"];
+		        if (layer == null)
+		        {
+                    layer = new GraphLayer("Default", Color.WhiteSmoke, 100);
+                    layer.UseColor = false; //use colors only for upper layers
+		            mLayers.Add(layer);
+		        }
+
+                return layer;
+            }
 		}
+
+	    public GraphLayer CurrentLayer
+	    {
+            get { return mCurrentLayer; }
+	    }
 
 		/// <summary>
 		/// Gets or sets the bounding rectangle
@@ -123,6 +149,10 @@ namespace Netron.GraphLib
             // for each shape in mShapes of the abstract
             foreach (Shape shape in mShapes)
 			{
+			    if (!shape.IsVisible || !shape.Layer.Visible)
+			    {
+                    continue;
+			    }
 				r = RectangleF.Union(r,shape.Rectangle);
 				if( shape.Tracker != null )
 				{
@@ -174,15 +204,21 @@ namespace Netron.GraphLib
 		public GraphAbstract()
 		{		 
 			mGraphInformation = new GraphInformation();
-			Init();
-		}
 
-		/// <summary>
-		/// Deserialization constructor
-		/// </summary>
-		/// <param name="info"></param>
-		/// <param name="context"></param>
-		public GraphAbstract(SerializationInfo info, StreamingContext context)
+            Init();
+
+//            Insert(DefaultLayer);
+            mCurrentLayer = DefaultLayer;
+            mCurrentLayer.Visible = true;
+
+        }
+
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        public GraphAbstract(SerializationInfo info, StreamingContext context)
 		{
 
 			#region Version test
@@ -198,7 +234,7 @@ namespace Netron.GraphLib
 			}
 			#endregion
 			
-			Init();
+//			Init();
 
 			this.mShapes = info.GetValue("mShapes", typeof(ShapeCollection)) as ShapeCollection;
 			this.mConnections = info.GetValue("mConnections", typeof(ConnectionCollection)) as ConnectionCollection;
@@ -208,16 +244,35 @@ namespace Netron.GraphLib
 
 			this.mLayers = info.GetValue("mLayers", typeof(GraphLayerCollection)) as GraphLayerCollection;
 
-		}
+            if (mLayers != null)
+		    {
+                GraphLayer layer = mLayers["Default"];
+                if (layer == null)
+		        {
+                    layer = new GraphLayer("Default", Color.WhiteSmoke, 100);
+                    layer.UseColor = false; //use colors only for upper layers
+		            mLayers.Add(layer);
+		        }
 
-		private void Init()
+                mCurrentLayer = layer;
+                mCurrentLayer.Visible = true;
+                mLayers.ClearComplete += new EventHandler(Layers_ClearComplete);
+            }
+
+            BindEntityCollectionEvents();
+
+        }
+
+        private void Init()
 		{
 			//the shape layers
+			GraphLayer layer = new GraphLayer("Default",Color.WhiteSmoke,100);
+            layer.UseColor = false; //use colors only for upper layers
+
 			mLayers = new GraphLayerCollection();
 			mLayers.ClearComplete+=new EventHandler(Layers_ClearComplete);
 			//the default layer
-			mDefaultLayer = new GraphLayer("Default",Color.WhiteSmoke,100);
-			mDefaultLayer.UseColor = false; //use colors only for upper layers
+            mLayers.Add(layer);
 			
 			BindEntityCollectionEvents();
 
@@ -234,11 +289,56 @@ namespace Netron.GraphLib
 			this.mConnections.OnConnectionAdded+=new ConnectionInfo(mConnections_OnConnectionAdded);
 			this.mConnections.OnConnectionRemoved+=new ConnectionInfo(mConnections_OnConnectionRemoved);
 		}
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		internal void SortPaintables()
+        /// <summary>
+        /// return the connections of layer
+        /// </summary>
+        /// <param name="layerName"></param>
+        /// <returns></returns>
+	    public ConnectionCollection ConnectionsOfLayer(string layerName)
+	    {
+	        ConnectionCollection connections = new ConnectionCollection();
+	        GraphLayer layer = Layers[layerName];
+	        if (layer != null)
+	        {
+	            foreach (Connection connection in Connections)
+	            {
+	                if (connection.Layer == layer)
+	                {
+	                    connections.Add(connection);
+	                }
+	            }
+	        }
+            return connections;
+	    }
+
+        /// <summary>
+        /// return the shapes of layer
+        /// </summary>
+        /// <param name="layerName"></param>
+        /// <returns></returns>
+        public ShapeCollection ShapesOfLayer(string layerName)
+        {
+            ShapeCollection shapes = new ShapeCollection();
+            GraphLayer layer = Layers[layerName];
+            if (layer != null)
+            {
+                foreach (Shape shape in Shapes)
+                {
+                    if (shape.Layer == layer)
+                    {
+                        shapes.Add(shape);
+                    }
+                }
+            }
+            return shapes;
+        }
+
+
+        internal void SortPaintables()
 		{
 			
 			//descending because the z-axis goes 'into' the screen, we use a right-handed coordinate system
@@ -299,6 +399,7 @@ namespace Netron.GraphLib
                         continue;
                     }
                 }
+
                 #endregion
 
                 paintables[k].PaintTracker(g);
@@ -349,15 +450,83 @@ namespace Netron.GraphLib
 
 			}
 		}
-		/// <summary>
-		/// Inserts a new object into the plex. 
-		/// </summary>
-		/// <param name="so">the object to insert</param>
-		/// <remarks>Note that you can add only one shape at a time.
-		/// </remarks>
-		internal protected void Insert(Shape so)
+
+        /// <summary>
+        /// 设置layerName的Layer为CurrentLayer,并设置前一个激活的Layer为不可见
+        /// </summary>
+        /// <param name="layerName"></param>
+        /// <returns>激活成功则返回true</returns>
+	    public bool ActiveLayer(string layerName)
+	    {
+	        GraphLayer layer = mLayers[layerName];
+	        if (layer != null)
+	        {
+	            foreach (GraphLayer l in mLayers)
+	            {
+                    l.Visible = false;
+	            }
+
+                mCurrentLayer = layer;
+                layer.Visible = true;
+	            Site.Invalidate();
+                return true;
+	        }
+
+            return false;
+	    }
+
+        /// <summary>
+        /// 设置编号为layerIndex的Layer为CurrentLayer,并设置前一个激活的Layer为不可见
+        /// </summary>
+        /// <param name="layerIndex"></param>
+        /// <returns></returns>
+	    public bool ActiveLayer(int layerIndex)
+	    {
+            GraphLayer layer = mLayers[layerIndex];
+            if (layer != null)
+            {
+                if (mCurrentLayer != null)
+                {
+                    mCurrentLayer.Visible = false;
+                }
+                mCurrentLayer = layer;
+                layer.Visible = true;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        ///if layer is not inserted before, insert it into Layers
+        /// </summary>
+        /// <param name="layer"></param>
+	    public void Insert(GraphLayer layer)
+	    {
+	        foreach (GraphLayer l in mLayers)
+	        {
+	            if (layer == l)
+	            {
+                    return;
+	            }
+	        }
+
+	        mLayers.Add(layer);
+	    }
+
+        /// <summary>
+        /// Inserts a new object into the plex. 
+        /// </summary>
+        /// <param name="so">the object to insert</param>
+        /// <remarks>Note that you can add only one shape at a time.
+        /// </remarks>
+        internal protected void Insert(Shape so)
 		{			
-			so.Insert(this);
+			//so.Insert(this);
+            so.Site = Site;
+            mShapes.Add(so);
+            so.SetLayer(mCurrentLayer.Name);
+
 			so.AddProperties();			
 			
 			Site.RaiseOnShapeAdded(so);
@@ -372,7 +541,8 @@ namespace Netron.GraphLib
 		{
 			mConnections.Add(con);			
 			con.AddProperties();
-			//Site.RaiseOnConnectionAdded(con,manual);
+		    con.SetLayer(CurrentLayer.Name);
+		    //Site.RaiseOnConnectionAdded(con,manual);
 		}
 
 		

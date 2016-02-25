@@ -116,7 +116,7 @@ namespace Netron.GraphLib
 				}			
 				
 				//GraphLayer dl = new GraphLayer("Default");
-				values.Add(GraphAbstract.DefaultLayer);
+				//values.Add(GraphAbstract.DefaultLayer);
 				//this is only for design-time support:
 				//ISelectionService serv = (ISelectionService )provider.GetService(typeof(ISelectionService ));
 				listbox.Items.Clear();

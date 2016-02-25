@@ -403,6 +403,8 @@ namespace Netron.GraphLib
 			{
 				//font is set by default in the member definition
 			}
+
+		    Tag =  info.GetString("mLayer");
 			//this.mIsSelected = info.GetBoolean("mIsSelected");
 			
 		}
@@ -436,14 +438,15 @@ namespace Netron.GraphLib
 		/// <param name="name"></param>
 		public void SetLayer(string name)
 		{
-			if(name.CompareTo("Default")==0)
-			{				
-				SetLayer(GraphAbstract.DefaultLayer);
-			}
-			else
-			{				
+		    GraphLayer layer = Site.Abstract.Layers[name];
+		    if (layer == null)
+		    {
+				SetLayer(Site.Abstract.DefaultLayer);
+		    }
+		    else
+		    {
 				SetLayer(Site.Abstract.Layers[name]);
-			}
+		    }
 		}
 		/// <summary>
 		/// Sets the shape in a layer.
@@ -452,15 +455,7 @@ namespace Netron.GraphLib
 		/// <param name="index"></param>
 		public void SetLayer(int index)
 		{
-			if(index==0)
-			{
-				SetLayer(GraphAbstract.DefaultLayer);
-			}
-			else
-			{
-				index--;//the collection starts at 0
-				SetLayer(Site.Abstract.Layers[index]);								
-			}
+            SetLayer(Site.Abstract.Layers[index]);
 		}
 
 
@@ -517,15 +512,18 @@ namespace Netron.GraphLib
 		/// </summary>
 		protected internal virtual void InitEntity()
 		{
-			
-			mLayer = GraphAbstract.DefaultLayer;
+
+		    if (Site != null)
+		    {
+		        mLayer = Site.Abstract.DefaultLayer;
+		    }
 			mBluePen= new Pen(Brushes.DarkSlateBlue,1F);
 			mBlackPen = new Pen(Brushes.Black,1F);
 			mUID = Guid.NewGuid();
 			mRecalculateSize = false;
 			mFont = new Font(mFontFamily,mFontSize,FontStyle.Regular,GraphicsUnit.Point);
 			mPen=new Pen(Brushes.Black, mPenWidth);
-			mLayer = GraphAbstract.DefaultLayer;//everything is initially in the default (static) layer
+//			mLayer = Site.Abstract.DefaultLayer;//everything is initially in the default (static) layer
 			mBag=new PropertyBag(this);
 			try
 			{					
@@ -665,9 +663,15 @@ namespace Netron.GraphLib
 		{
 			//add the properties
 			this.AddProperties();
-		}
+            if (Tag is string)
+            {
+                SetLayer((string)Tag);
+                Tag = null; //be nice to the host/user
+            }
 
-		#endregion
-	}
+        }
+
+        #endregion
+    }
 }
 

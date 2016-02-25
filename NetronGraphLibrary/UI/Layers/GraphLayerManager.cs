@@ -79,193 +79,199 @@ namespace Netron.GraphLib.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.listView = new Netron.GraphLib.UI.ListViewEx();
-			this.colName = new System.Windows.Forms.ColumnHeader();
-			this.colNumber = new System.Windows.Forms.ColumnHeader();
-			this.colVisible = new System.Windows.Forms.ColumnHeader();
-			this.colLock = new System.Windows.Forms.ColumnHeader();
-			this.colColor = new System.Windows.Forms.ColumnHeader();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.RemoveButton = new System.Windows.Forms.Button();
-			this.RenameButton = new System.Windows.Forms.Button();
-			this.NewLayerButton = new System.Windows.Forms.Button();
-			this.ChooseColorButton = new System.Windows.Forms.Button();
-			this.CurrentColor = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.TransText = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.TransGauge = new System.Windows.Forms.TrackBar();
-			this.groupBox1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.TransGauge)).BeginInit();
-			this.SuspendLayout();
-			// 
-			// listView
-			// 
-			this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.listView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																					   this.colName,
-																					   this.colNumber,
-																					   this.colVisible,
-																					   this.colLock,
-																					   this.colColor});
-			this.listView.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.listView.FullRowSelect = true;
-			this.listView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-			this.listView.Location = new System.Drawing.Point(8, 8);
-			this.listView.Name = "listView";
-			this.listView.Size = new System.Drawing.Size(496, 160);
-			this.listView.TabIndex = 0;
-			this.listView.View = System.Windows.Forms.View.Details;
-			this.listView.Click += new System.EventHandler(this.listView_Click);
-			this.listView.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
-			// 
-			// colName
-			// 
-			this.colName.Text = "Name";
-			this.colName.Width = 157;
-			// 
-			// colNumber
-			// 
-			this.colNumber.Text = "#";
-			this.colNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			// 
-			// colVisible
-			// 
-			this.colVisible.Text = "Visible";
-			this.colVisible.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.colVisible.Width = 91;
-			// 
-			// colLock
-			// 
-			this.colLock.Text = "Lock";
-			this.colLock.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.colLock.Width = 87;
-			// 
-			// colColor
-			// 
-			this.colColor.Text = "Use color";
-			this.colColor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.colColor.Width = 101;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox1.Controls.Add(this.RemoveButton);
-			this.groupBox1.Controls.Add(this.RenameButton);
-			this.groupBox1.Controls.Add(this.NewLayerButton);
-			this.groupBox1.Controls.Add(this.ChooseColorButton);
-			this.groupBox1.Controls.Add(this.CurrentColor);
-			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Controls.Add(this.TransText);
-			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Controls.Add(this.TransGauge);
-			this.groupBox1.Location = new System.Drawing.Point(8, 176);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(496, 104);
-			this.groupBox1.TabIndex = 9;
-			this.groupBox1.TabStop = false;
-			// 
-			// RemoveButton
-			// 
-			this.RemoveButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.RemoveButton.Location = new System.Drawing.Point(88, 24);
-			this.RemoveButton.Name = "RemoveButton";
-			this.RemoveButton.TabIndex = 20;
-			this.RemoveButton.Text = "Remove";
-			this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
-			// 
-			// RenameButton
-			// 
-			this.RenameButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.RenameButton.Location = new System.Drawing.Point(168, 24);
-			this.RenameButton.Name = "RenameButton";
-			this.RenameButton.TabIndex = 19;
-			this.RenameButton.Text = "Rename...";
-			this.RenameButton.Click += new System.EventHandler(this.RenameButton_Click);
-			// 
-			// NewLayerButton
-			// 
-			this.NewLayerButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.NewLayerButton.Location = new System.Drawing.Point(8, 24);
-			this.NewLayerButton.Name = "NewLayerButton";
-			this.NewLayerButton.TabIndex = 18;
-			this.NewLayerButton.Text = "New...";
-			this.NewLayerButton.Click += new System.EventHandler(this.NewLayerButton_Click);
-			// 
-			// ChooseColorButton
-			// 
-			this.ChooseColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.ChooseColorButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.ChooseColorButton.Location = new System.Drawing.Point(448, 21);
-			this.ChooseColorButton.Name = "ChooseColorButton";
-			this.ChooseColorButton.Size = new System.Drawing.Size(25, 23);
-			this.ChooseColorButton.TabIndex = 17;
-			this.ChooseColorButton.Text = "...";
-			this.ChooseColorButton.Click += new System.EventHandler(this.ChooseColorButton_Click);
-			// 
-			// CurrentColor
-			// 
-			this.CurrentColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.CurrentColor.BackColor = System.Drawing.Color.Brown;
-			this.CurrentColor.Location = new System.Drawing.Point(352, 21);
-			this.CurrentColor.Name = "CurrentColor";
-			this.CurrentColor.Size = new System.Drawing.Size(88, 23);
-			this.CurrentColor.TabIndex = 16;
-			// 
-			// label2
-			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Location = new System.Drawing.Point(256, 21);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(67, 23);
-			this.label2.TabIndex = 15;
-			this.label2.Text = "Layer color:";
-			// 
-			// TransText
-			// 
-			this.TransText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.TransText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.TransText.Location = new System.Drawing.Point(448, 66);
-			this.TransText.MaxLength = 3;
-			this.TransText.Name = "TransText";
-			this.TransText.Size = new System.Drawing.Size(32, 20);
-			this.TransText.TabIndex = 14;
-			this.TransText.Text = "";
-			this.TransText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TransText_KeyPress);
-			// 
-			// label1
-			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.label1.Location = new System.Drawing.Point(256, 66);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(80, 23);
-			this.label1.TabIndex = 13;
-			this.label1.Text = "Transparency:";
-			// 
-			// TransGauge
-			// 
-			this.TransGauge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.TransGauge.LargeChange = 10;
-			this.TransGauge.Location = new System.Drawing.Point(344, 52);
-			this.TransGauge.Maximum = 100;
-			this.TransGauge.Name = "TransGauge";
-			this.TransGauge.TabIndex = 12;
-			this.TransGauge.TickFrequency = 10;
-			this.TransGauge.Scroll += new System.EventHandler(this.TransGauge_Scroll);
-			// 
-			// GraphLayerManager
-			// 
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.listView);
-			this.Name = "GraphLayerManager";
-			this.Size = new System.Drawing.Size(512, 288);
-			this.groupBox1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.TransGauge)).EndInit();
-			this.ResumeLayout(false);
+            this.listView = new Netron.GraphLib.UI.ListViewEx();
+            this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colVisible = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colLock = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colColor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.RemoveButton = new System.Windows.Forms.Button();
+            this.RenameButton = new System.Windows.Forms.Button();
+            this.NewLayerButton = new System.Windows.Forms.Button();
+            this.ChooseColorButton = new System.Windows.Forms.Button();
+            this.CurrentColor = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.TransText = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.TransGauge = new System.Windows.Forms.TrackBar();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TransGauge)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // listView
+            // 
+            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colName,
+            this.colNumber,
+            this.colVisible,
+            this.colLock,
+            this.colColor});
+            this.listView.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.listView.FullRowSelect = true;
+            this.listView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listView.HideSelection = false;
+            this.listView.Location = new System.Drawing.Point(8, 8);
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size(496, 160);
+            this.listView.TabIndex = 0;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
+            this.listView.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
+            this.listView.Click += new System.EventHandler(this.listView_Click);
+            // 
+            // colName
+            // 
+            this.colName.Text = "Name";
+            this.colName.Width = 157;
+            // 
+            // colNumber
+            // 
+            this.colNumber.Text = "#";
+            this.colNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // colVisible
+            // 
+            this.colVisible.Text = "Visible";
+            this.colVisible.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.colVisible.Width = 91;
+            // 
+            // colLock
+            // 
+            this.colLock.Text = "Lock";
+            this.colLock.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.colLock.Width = 87;
+            // 
+            // colColor
+            // 
+            this.colColor.Text = "Use color";
+            this.colColor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.colColor.Width = 101;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.RemoveButton);
+            this.groupBox1.Controls.Add(this.RenameButton);
+            this.groupBox1.Controls.Add(this.NewLayerButton);
+            this.groupBox1.Controls.Add(this.ChooseColorButton);
+            this.groupBox1.Controls.Add(this.CurrentColor);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.TransText);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.TransGauge);
+            this.groupBox1.Location = new System.Drawing.Point(8, 176);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(496, 104);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            // 
+            // RemoveButton
+            // 
+            this.RemoveButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.RemoveButton.Location = new System.Drawing.Point(88, 24);
+            this.RemoveButton.Name = "RemoveButton";
+            this.RemoveButton.Size = new System.Drawing.Size(75, 23);
+            this.RemoveButton.TabIndex = 20;
+            this.RemoveButton.Text = "Remove";
+            this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
+            // 
+            // RenameButton
+            // 
+            this.RenameButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.RenameButton.Location = new System.Drawing.Point(168, 24);
+            this.RenameButton.Name = "RenameButton";
+            this.RenameButton.Size = new System.Drawing.Size(75, 23);
+            this.RenameButton.TabIndex = 19;
+            this.RenameButton.Text = "Rename...";
+            this.RenameButton.Click += new System.EventHandler(this.RenameButton_Click);
+            // 
+            // NewLayerButton
+            // 
+            this.NewLayerButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.NewLayerButton.Location = new System.Drawing.Point(8, 24);
+            this.NewLayerButton.Name = "NewLayerButton";
+            this.NewLayerButton.Size = new System.Drawing.Size(75, 23);
+            this.NewLayerButton.TabIndex = 18;
+            this.NewLayerButton.Text = "New...";
+            this.NewLayerButton.Click += new System.EventHandler(this.NewLayerButton_Click);
+            // 
+            // ChooseColorButton
+            // 
+            this.ChooseColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ChooseColorButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ChooseColorButton.Location = new System.Drawing.Point(448, 21);
+            this.ChooseColorButton.Name = "ChooseColorButton";
+            this.ChooseColorButton.Size = new System.Drawing.Size(25, 23);
+            this.ChooseColorButton.TabIndex = 17;
+            this.ChooseColorButton.Text = "...";
+            this.ChooseColorButton.Click += new System.EventHandler(this.ChooseColorButton_Click);
+            // 
+            // CurrentColor
+            // 
+            this.CurrentColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.CurrentColor.BackColor = System.Drawing.Color.Brown;
+            this.CurrentColor.Location = new System.Drawing.Point(352, 21);
+            this.CurrentColor.Name = "CurrentColor";
+            this.CurrentColor.Size = new System.Drawing.Size(88, 23);
+            this.CurrentColor.TabIndex = 16;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Location = new System.Drawing.Point(256, 21);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 23);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Layer color:";
+            // 
+            // TransText
+            // 
+            this.TransText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.TransText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.TransText.Location = new System.Drawing.Point(448, 66);
+            this.TransText.MaxLength = 3;
+            this.TransText.Name = "TransText";
+            this.TransText.Size = new System.Drawing.Size(32, 21);
+            this.TransText.TabIndex = 14;
+            this.TransText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TransText_KeyPress);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Location = new System.Drawing.Point(256, 66);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(80, 23);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Transparency:";
+            // 
+            // TransGauge
+            // 
+            this.TransGauge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.TransGauge.LargeChange = 10;
+            this.TransGauge.Location = new System.Drawing.Point(344, 52);
+            this.TransGauge.Maximum = 100;
+            this.TransGauge.Name = "TransGauge";
+            this.TransGauge.Size = new System.Drawing.Size(104, 45);
+            this.TransGauge.TabIndex = 12;
+            this.TransGauge.TickFrequency = 10;
+            this.TransGauge.Scroll += new System.EventHandler(this.TransGauge_Scroll);
+            // 
+            // GraphLayerManager
+            // 
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.listView);
+            this.Name = "GraphLayerManager";
+            this.Size = new System.Drawing.Size(512, 288);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TransGauge)).EndInit();
+            this.ResumeLayout(false);
 
 		}
 		#endregion

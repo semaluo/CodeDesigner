@@ -141,7 +141,7 @@ namespace FlowDesigner
 
             if (From == null) return new PointF[] { PointF.Empty };
 
-            if (From?.Name == "Left" && To?.Name == "Left")
+            if (From != null && To != null && From.Name == "Left" && To.Name == "Left")
             {
                 //From and To connector both are Left connector, 
                 //The connection must be vertical connection

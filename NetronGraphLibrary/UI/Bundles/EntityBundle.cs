@@ -40,6 +40,8 @@ namespace Netron.GraphLib
 					{
 						rec = RectangleF.Union(rec, Shapes[k].Rectangle);
 					}
+
+				    rec.Inflate(1, 1);
 					return rec;
 				}
 			}

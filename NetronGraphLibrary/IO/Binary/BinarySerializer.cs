@@ -310,7 +310,7 @@ namespace Netron.GraphLib.IO.Binary
 					continue;
 				}
 
-				if(!typeof(BezierPainter).IsInstanceOfType(con.Painter)) //because the BezierPainter has the Points of the BezierPainter serialized						
+				if(!(con.Painter is BezierPainter)) //because the BezierPainter has the Points of the BezierPainter serialized						
 					con.Painter.Points=con.GetConnectionPoints();					
 				con.Tracker = new ConnectionTracker(con.InsertionPoints, true);
 				con.PostDeserialization();

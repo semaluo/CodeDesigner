@@ -1107,22 +1107,35 @@ namespace Netron.GraphLib.UI
 			}
 			base.Dispose( disposing );
 		}
-		#endregion
+        #endregion
 
-		#region Methods
-	
-	
-		#region Control logic
+        #region Methods
 
-		#region Zoomers
+        public ConnectionCollection ConnectionsOfLayer(string layerName)
+        {
+            return Abstract.ConnectionsOfLayer(layerName);
+        }
 
-		
-		/// <summary>
-		/// Zooms given point.
-		/// </summary>
-		/// <param name="originalPt">Point to currentZoomFactor</param>
-		/// <returns>zoomed point.</returns>
-		public Point ZoomPoint(Point originalPt)
+        /// <summary>
+        /// return the shapes of layer
+        /// </summary>
+        /// <param name="layerName"></param>
+        /// <returns></returns>
+        public ShapeCollection ShapesOfLayer(string layerName)
+        {
+            return Abstract.ShapesOfLayer(layerName);
+        }
+        #region Control logic
+
+        #region Zoomers
+
+
+        /// <summary>
+        /// Zooms given point.
+        /// </summary>
+        /// <param name="originalPt">Point to currentZoomFactor</param>
+        /// <returns>zoomed point.</returns>
+        public Point ZoomPoint(Point originalPt)
 		{
 			Point newPt = new Point((int)(this.currentZoomFactor*originalPt.X), (int)( this.currentZoomFactor*originalPt.Y ));
 			return newPt; 
@@ -2102,16 +2115,21 @@ namespace Netron.GraphLib.UI
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			
-			Rectangle b = ZoomRectangle(Rectangle.Round(extract.Rectangle));
-			AutoScrollMinSize = b.Size;
 			Graphics g =e.Graphics;
-			
-			//prepend transformations for zooming
-			
-			g.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y,MatrixOrder.Append);
+			Rectangle b = ZoomRectangle(Rectangle.Round(extract.Rectangle));
+
+            //TODO: Calculate size for MSWord A4 
+            AutoScrollMinSize = ExpandWithMSWordPageSize(b.Size, g);
+            
+
+            //prepend transformations for zooming
+
+            g.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y,MatrixOrder.Append);
 			g.ScaleTransform(this.currentZoomFactor,this.currentZoomFactor,MatrixOrder.Prepend);			
 			
 			g.SmoothingMode=SmoothingMode.HighQuality;
+
+		    DrawPageLine(b.Size, g);
 		
 #if DEBUG
 			freeArrows.Paint(g);
@@ -2130,13 +2148,55 @@ namespace Netron.GraphLib.UI
 			if(mShowAutomataController)	automataController.Paint(g);
 
 		}
-			
-		/// <summary>
-		/// Paints the background of the canvas, could have been done in the paint handler as well.
-		/// This is not clear in the .Net doc.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnPaintBackground(PaintEventArgs e)
+
+        private void DrawPageLine(Size size, Graphics g)
+        {
+            Size pageSize = PageSize.GetMSWordPage((int)g.DpiX, (int)g.DpiY);
+            int pageX = (int)Math.Ceiling((double)(size.Width * 1.0 / pageSize.Width));
+            int pageY = (int)Math.Ceiling((double)(size.Height * 1.0 / pageSize.Height));
+            int x1, y1, x2, y2;
+
+            //Draw dot line
+            Pen pen = new Pen(Color.Black, 1);
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Custom;
+            pen.DashPattern = new float[] { 5, 5 };
+
+            pageX += 2;
+            pageY += 2;
+            //Draw horizontal lines
+            for (int i = 0; i < pageX ; i++)
+            {
+                x1 = 0;  //left edge
+                x2 = pageX * pageSize.Width; //right edge
+                y1 = y2 = (int) (pageSize.Height * i);
+                g.DrawLine(pen, x1, y1, x2, y2);
+            }
+
+            //Draw vertical lines
+            for (int j = 0; j < pageY + 2; j++)
+            {
+                x1 = x2 = (int) (pageSize.Width * j);
+                y1 = 0;
+                y2 = pageY * pageSize.Height;
+                g.DrawLine(pen, x1, y1, x2, y2);
+            }
+        }
+
+        private Size ExpandWithMSWordPageSize(Size size, Graphics g)
+        {
+            Size sizeMSWordPage = PageSize.GetMSWordPage((int)g.DpiX, (int)g.DpiY);
+            int pageX = (int)Math.Ceiling((double)(size.Width * 1.0 / sizeMSWordPage.Width));
+            int pageY = (int)Math.Ceiling((double)(size.Height * 1.0 / sizeMSWordPage.Height));
+
+            return new Size(pageX * sizeMSWordPage.Width, pageY * sizeMSWordPage.Height);
+        }
+
+        /// <summary>
+        /// Paints the background of the canvas, could have been done in the paint handler as well.
+        /// This is not clear in the .Net doc.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnPaintBackground(PaintEventArgs e)
 		{
 			Graphics g=e.Graphics;			
 			
@@ -2951,8 +3011,9 @@ namespace Netron.GraphLib.UI
 		/// <returns></returns>
 		public Image GetDiagramImage()
 		{
-			Bitmap bmp=new Bitmap(this.Width,this.Height,this.CreateGraphics());
-			using(Graphics g = Graphics.FromImage(bmp))
+//            Bitmap bmp = new Bitmap(this.Width, this.Height, this.CreateGraphics());
+            Bitmap bmp = new Bitmap((int)Abstract.Rectangle.Width + 2, (int)Abstract.Rectangle.Height + 2, this.CreateGraphics());
+            using (Graphics g = Graphics.FromImage(bmp))
 			{
 				extract.Paint(g);
 			}
@@ -3411,10 +3472,25 @@ namespace Netron.GraphLib.UI
 				}				
 				return;
 			}
-			#endregion
+            #endregion
 
-			#region CTRL-L
-			if (e.KeyCode==Keys.L && e.Control)	
+            #region Copy & Paste
+            if (e.KeyCode == Keys.C && e.Control)
+            {
+                this.Copy();
+                return;
+            }
+
+            if (e.KeyCode == Keys.V && e.Control)
+            {
+                this.Paste();
+                return;
+            }
+            #endregion
+
+
+            #region CTRL-L
+            if (e.KeyCode==Keys.L && e.Control)	
 			{
 				this.StartLayout();
 				return;
@@ -3862,7 +3938,14 @@ namespace Netron.GraphLib.UI
 			
 			DataObject data = new DataObject("Netron.GraphLib.EntityBundle", bundle.Copy());
 
-			Clipboard.SetDataObject(data);
+            //Copy Bitmap as well for other applications
+            Bitmap bmp = bundle.TakeScreenshotWithBackground(this.Graphics, Color.White);
+            if (bmp != null)
+            {
+                data.SetImage(bmp);
+            }
+
+            Clipboard.SetDataObject(data);
 		}
 		/// <summary>
 		/// Copies the selected elements of the diagram as an image to the clipboard
@@ -3915,15 +3998,24 @@ namespace Netron.GraphLib.UI
 						for(int k=0; k<bundle.Shapes.Count; k++)					
 						{
 							bundle.Shapes[k].GenerateNewUID();
+                            bundle.Shapes[k].Site = this;
+                            bundle.Shapes[k].SetLayer(Abstract.CurrentLayer.Name);
 							//the connectors as well
 							foreach(Connector c in bundle.Shapes[k].Connectors)
 							{
 								c.GenerateNewUID();
+							    c.Site = this;
+							    c.SetLayer(Abstract.CurrentLayer.Name);
 							}
 						}
-						for(int k=0; k<bundle.Connections.Count; k++)					
-							bundle.Connections[k].GenerateNewUID();					
-					}
+					    for (int k = 0; k < bundle.Connections.Count; k++)
+					    {
+					        bundle.Connections[k].GenerateNewUID();
+                            bundle.Connections[k].Site = this;
+                            bundle.Connections[k].SetLayer(Abstract.CurrentLayer.Name);
+
+                        }
+                    }
 
 					this.Deselect();
 					AddBundle(bundle);
@@ -4069,6 +4161,15 @@ namespace Netron.GraphLib.UI
 			{
 				foreach (Shape o in extract.Shapes)
 				{
+				    if (!o.IsVisible || !o.Layer.Visible)
+				    {
+				        o.IsSelected = false;
+                        foreach (Connector c in o.Connectors)
+                            foreach (Connection n in c.Connections)
+                                n.IsSelected = false;
+                        continue;
+				    }
+
 					o.IsSelected= true;
 
 					foreach (Connector c in o.Connectors)
@@ -4083,7 +4184,13 @@ namespace Netron.GraphLib.UI
 			{
 				foreach (Shape so in extract.Shapes)
 				{
-					so.IsSelected=true;
+				    if (!so.IsVisible || !so.Layer.Visible)
+				    {
+				        so.IsSelected = false;
+                        continue;
+				    }
+
+                    so.IsSelected=true;
 				}
 			}
 		}
